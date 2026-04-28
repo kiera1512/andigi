@@ -86,7 +86,7 @@ function renderMarkdown(markdown: string) {
 
   // Lists
   html = html.replace(/^\d+\. (.*?)$/gm, "<li className=\"ml-6\">$1</li>");
-  html = html.replace(/(<li[^>]*>.*?<\/li>)/s, "<ol className=\"list-decimal ml-6 my-4\">$1</ol>");
+  html = html.replace(/(<li[^>]*>[\s\S]*?<\/li>)/, "<ol className=\"list-decimal ml-6 my-4\">$1</ol>");
 
   // Paragraphs
   html = html
