@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { getShareUrls } from "@/lib/blog-utils";
-import { Facebook, X, Share2, Link2, Check } from "lucide-react";
+import { FaFacebook, FaXTwitter, FaLinkedin } from "react-icons/fa6";
+import { MdContentCopy, MdCheck } from "react-icons/md";
 
 interface ShareButtonsProps {
   url: string;
@@ -42,7 +43,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
           aria-label="Share on Facebook"
           className="h-10 w-10"
         >
-          <Facebook className="h-4 w-4" />
+          <FaFacebook className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
@@ -51,7 +52,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
           aria-label="Share on X"
           className="h-10 w-10"
         >
-          <X className="h-4 w-4" />
+          <FaXTwitter className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
@@ -60,7 +61,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
           aria-label="Share on LinkedIn"
           className="h-10 w-10"
         >
-          <Share2 className="h-4 w-4" />
+          <FaLinkedin className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
@@ -70,9 +71,9 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
           className="h-10 w-10"
         >
           {copied ? (
-            <Check className="h-4 w-4 text-success" />
+            <MdCheck className="h-4 w-4 text-success" />
           ) : (
-            <Link2 className="h-4 w-4" />
+            <MdContentCopy className="h-4 w-4" />
           )}
         </Button>
       </div>
