@@ -6,7 +6,10 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
-import { ArrowLeft } from "lucide-react";
+import { ShareButtons } from "@/components/blog/share-buttons";
+import { RelatedPosts } from "@/components/blog/related-posts";
+import { calculateReadingTime, formatReadingTime, getRelatedPosts } from "@/lib/blog-utils";
+import { ArrowLeft, Clock } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -39,6 +42,24 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
   } catch (error) {
     console.error("Error fetching blog post:", error);
     return null;
+  }
+}
+
+async function getAllBlogPosts(): Promise<BlogPost[]> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/blog`, {
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const { data } = await response.json();
+    return data || [];
+  } catch (error) {
+    console.error("Error fetching all blog posts:", error);
+    return [];
   }
 }
 
@@ -99,11 +120,18 @@ function renderMarkdown(markdown: string) {
 
 export default async function BlogDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = await getBlogPost(slug);
+  const [post, allPosts] = await Promise.all([
+    getBlogPost(slug),
+    getAllBlogPosts(),
+  ]);
 
   if (!post) {
     notFound();
   }
+
+  const readingTime = calculateReadingTime(post.content);
+  const relatedPosts = getRelatedPosts(post, allPosts, 3);
+  const postUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://andigi.com'}/blog/${post.slug}`;
 
   return (
     <>
@@ -127,13 +155,18 @@ export default async function BlogDetailPage({ params }: PageProps) {
           </Link>
 
           <div className="max-w-4xl">
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 flex-wrap mb-6">
               <Badge variant="outline">{post.category}</Badge>
               <span className="text-sm text-muted-foreground">
                 {formatDate(post.published_at)}
               </span>
               <span className="text-sm text-muted-foreground">•</span>
               <span className="text-sm text-muted-foreground">{post.author}</span>
+              <span className="text-sm text-muted-foreground">•</span>
+              <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                <Clock className="h-3.5 w-3.5" />
+                {formatReadingTime(readingTime)}
+              </span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{post.title}</h1>
@@ -163,45 +196,18 @@ export default async function BlogDetailPage({ params }: PageProps) {
       <Section>
         <Container>
           <div className="max-w-4xl prose prose-lg">
-            <div className="space-y-4 text-lg leading-relaxed">
-              {post.content.split("\n").map((line, idx) => {
-                if (line.startsWith("### ")) {
-                  return (
-                    <h3 key={idx} className="text-lg font-semibold mt-6 mb-3">
-                      {line.replace("### ", "")}
-                    </h3>
-                  );
-                } else if (line.startsWith("## ")) {
-                  return (
-                    <h2 key={idx} className="text-2xl font-semibold mt-8 mb-4">
-                      {line.replace("## ", "")}
-                    </h2>
-                  );
-                } else if (line.startsWith("- ")) {
-                  return (
-                    <li key={idx} className="ml-6">
-                      {line.replace("- ", "")}
-                    </li>
-                  );
-                } else if (line.startsWith("1. ") || line.match(/^\d+\. /)) {
-                  return (
-                    <li key={idx} className="ml-6 list-decimal">
-                      {line.replace(/^\d+\. /, "")}
-                    </li>
-                  );
-                } else if (line.trim()) {
-                  return (
-                    <p key={idx} className="mb-4">
-                      {line}
-                    </p>
-                  );
-                }
-                return null;
-              })}
+            <div className="space-y-4 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: post.content }} />
+
+            {/* Share Buttons */}
+            <div className="mt-12 pt-8 border-t border-border">
+              <ShareButtons url={postUrl} title={post.title} />
             </div>
           </div>
         </Container>
       </Section>
+
+      {/* Related Posts */}
+      {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
     </>
   );
 }
