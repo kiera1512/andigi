@@ -24,7 +24,6 @@ interface BlogPost {
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/blog`, {
-      cache: 'revalidate',
       next: { revalidate: 3600 }, // Revalidate every hour
     });
 

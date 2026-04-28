@@ -27,7 +27,6 @@ interface BlogPost {
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/blog/${slug}`, {
-      cache: 'revalidate',
       next: { revalidate: 3600 },
     });
 
