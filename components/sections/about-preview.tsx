@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
+import { FadeIn } from "@/components/ui/fade-in";
 import { stats } from "@/lib/data";
 import { ArrowRight } from "lucide-react";
 
@@ -12,17 +13,19 @@ export function AboutPreview() {
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Image */}
-          <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-            <Image
-              src="/placeholder.svg?height=600&width=800"
-              alt="Andigi team at work"
-              fill
-              className="object-cover"
-            />
-          </div>
+          <FadeIn direction="left">
+            <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+              <Image
+                src="/placeholder.svg?height=600&width=800"
+                alt="Andigi team at work"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </FadeIn>
 
           {/* Content */}
-          <div>
+          <FadeIn direction="right" delay={200}>
             <h2 className="font-semibold">
               We are a team of digital craftspeople
             </h2>
@@ -57,7 +60,7 @@ export function AboutPreview() {
                 </Link>
               </Button>
             </div>
-          </div>
+          </FadeIn>
         </div>
       </Container>
     </Section>

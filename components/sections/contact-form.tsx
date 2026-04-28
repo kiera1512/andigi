@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { services } from "@/lib/data";
+import { useToast } from "@/components/ui/toast";
 
 interface ContactFormData {
   name: string;
@@ -20,6 +20,7 @@ export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { addToast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,9 +52,11 @@ export function ContactForm() {
       }
 
       setIsSubmitted(true);
+      addToast("Your message has been sent successfully!", "success");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-      console.error("Contact form error:", err);
+      const errorMessage = err instanceof Error ? err.message : "An error occurred";
+      setError(errorMessage);
+      addToast(errorMessage, "error");
     } finally {
       setIsSubmitting(false);
     }

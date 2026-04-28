@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { FadeIn } from "@/components/ui/fade-in";
 import { portfolioProjects } from "@/lib/data";
 import { ArrowRight } from "lucide-react";
 
@@ -30,37 +31,38 @@ export function PortfolioGrid({ showAll = false, title, subtitle, limit }: Portf
         )}
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <Link
-              key={project.id}
-              href={`/portfolio/${project.slug}`}
-              className="group block"
-            >
-              <article className="overflow-hidden border border-border transition-shadow hover:shadow-lg">
-                <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-                  <Image
-                    src={project.featuredImage}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <Badge variant="outline" className="mb-3">
-                    {project.category}
-                  </Badge>
-                  <h3 className="text-xl font-semibold group-hover:text-primary">
-                    {project.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {project.client}
-                  </p>
-                  <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
-                    {project.excerpt}
-                  </p>
-                </div>
-              </article>
-            </Link>
+          {projects.map((project, index) => (
+            <FadeIn key={project.id} delay={index * 100} direction="up">
+              <Link
+                href={`/portfolio/${project.slug}`}
+                className="group block h-full"
+              >
+                <article className="h-full overflow-hidden border border-border transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+                    <Image
+                      src={project.featuredImage}
+                      alt={project.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <Badge variant="outline" className="mb-3">
+                      {project.category}
+                    </Badge>
+                    <h3 className="text-xl font-semibold transition-colors group-hover:text-primary">
+                      {project.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {project.client}
+                    </p>
+                    <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
+                      {project.excerpt}
+                    </p>
+                  </div>
+                </article>
+              </Link>
+            </FadeIn>
           ))}
         </div>
 
