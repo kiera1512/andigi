@@ -217,7 +217,7 @@ Update `lib/data.ts` in the `teamMembers` array
 
 ## License
 
-Copyright © 2024 Andigi. All rights reserved.
+Copyright © 2026 Andigi. All rights reserved.
 
 ## Support
 
