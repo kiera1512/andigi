@@ -102,3 +102,10 @@ h4 {
   background-color: var(--primary);
   color: var(--primary-foreground);
 }
+
+/* Mobile nav link stagger */
+@media (max-width: 767px) {
+  #mobile-menu nav a {
+    transition: opacity 200ms ease, transform 200ms ease, color 150ms ease;
+  }
+}
