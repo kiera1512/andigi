@@ -6,8 +6,9 @@ import { Section } from "@/components/ui/section";
 import { Mail, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Get in touch with Andigi. We would love to hear about your project.",
+  title: "Contact - Andigi",
+  description: "Get in touch with Andigi. We would love to hear about your project. Contact us to start your digital transformation.",
+  keywords: ["contact", "inquiry", "quote", "digital services"],
 };
 
 export default function ContactPage() {

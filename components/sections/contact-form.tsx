@@ -7,19 +7,56 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { services } from "@/lib/data";
 
+interface ContactFormData {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  subject: string;
+  message: string;
+}
+
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const formData = new FormData(e.currentTarget);
+      const data: ContactFormData = {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        phone: (formData.get("phone") as string) || undefined,
+        company: (formData.get("company") as string) || undefined,
+        subject: "Website Contact Form",
+        message: formData.get("message") as string,
+      };
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error || "Failed to submit form");
+      }
+
+      setIsSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+      console.error("Contact form error:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (isSubmitted) {
@@ -35,6 +72,12 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {error && (
+        <div className="border border-accent bg-accent/10 p-4 text-accent">
+          <p className="text-sm font-medium">{error}</p>
+        </div>
+      )}
+
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="name">Name *</Label>
@@ -60,30 +103,22 @@ export function ContactForm() {
 
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
+          <Label htmlFor="phone">Phone</Label>
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="Your phone (optional)"
+          />
+        </div>
+
+        <div className="space-y-2">
           <Label htmlFor="company">Company</Label>
           <Input
             id="company"
             name="company"
             placeholder="Your company (optional)"
           />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="service">Service Interest *</Label>
-          <select
-            id="service"
-            name="service"
-            required
-            className="flex h-12 w-full border border-border bg-background px-4 py-2 text-base file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <option value="">Select a service</option>
-            {services.map((service) => (
-              <option key={service.id} value={service.id}>
-                {service.title}
-              </option>
-            ))}
-            <option value="other">Other</option>
-          </select>
         </div>
       </div>
 

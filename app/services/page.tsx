@@ -5,8 +5,9 @@ import { ProcessSection } from "@/components/sections/process-section";
 import { CtaSection } from "@/components/sections/cta-section";
 
 export const metadata: Metadata = {
-  title: "Services",
-  description: "Web Design, Branding, Digital Marketing, and Ecommerce solutions. We help businesses grow with strategic digital services.",
+  title: "Services - Andigi",
+  description: "Web Design, Branding, Digital Marketing, and Ecommerce solutions. We help businesses grow with strategic digital services tailored to your needs.",
+  keywords: ["web design", "branding", "digital marketing", "ecommerce", "agency"],
 };
 
 export default function ServicesPage() {

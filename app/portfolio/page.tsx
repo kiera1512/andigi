@@ -4,8 +4,9 @@ import { PortfolioGrid } from "@/components/sections/portfolio-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Explore our portfolio of successful projects in Web Design, Branding, Digital Marketing, and Ecommerce.",
+  title: "Portfolio - Andigi",
+  description: "Explore our portfolio of successful projects in Web Design, Branding, Digital Marketing, and Ecommerce. See how we help businesses grow.",
+  keywords: ["portfolio", "case studies", "web design", "branding", "digital marketing"],
 };
 
 export default function PortfolioPage() {

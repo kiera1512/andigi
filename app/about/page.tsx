@@ -8,8 +8,9 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 
 export const metadata: Metadata = {
-  title: "About",
-  description: "Learn about Andigi - a digital agency crafting exceptional digital experiences since 2017.",
+  title: "About - Andigi",
+  description: "Learn about Andigi - a digital agency crafting exceptional digital experiences since 2017. Meet our team of designers, developers, and strategists.",
+  keywords: ["about", "team", "agency", "design", "digital"],
 };
 
 export default function AboutPage() {
