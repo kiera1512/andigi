@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { getShareUrls } from "@/lib/blog-utils";
-import { Facebook, X, Linkedin, Link2, Check } from "lucide-react";
+import { Facebook, X, Share2, Link2, Check } from "lucide-react";
 
 interface ShareButtonsProps {
   url: string;
@@ -60,7 +60,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
           aria-label="Share on LinkedIn"
           className="h-10 w-10"
         >
-          <Linkedin className="h-4 w-4" />
+          <Share2 className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
