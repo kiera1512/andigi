@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { portfolioProjects } from "@/lib/data";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -50,6 +51,15 @@ export default async function PortfolioDetailPage({ params }: PageProps) {
       {/* Hero */}
       <section className="py-16 md:py-24">
         <Container>
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Portfolio", href: "/portfolio" },
+              { label: project.title },
+            ]}
+            className="mb-8"
+          />
+
           <Link
             href="/portfolio"
             className="mb-8 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"

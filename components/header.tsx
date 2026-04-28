@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -94,38 +95,42 @@ export function Header() {
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
             <Button asChild>
               <Link href="/contact">Contact Us</Link>
             </Button>
           </div>
 
           {/* Mobile Toggle Button */}
-          <button
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
             type="button"
             className="flex h-10 w-10 items-center justify-center text-foreground transition-colors hover:text-primary md:hidden"
             onClick={toggleMenu}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
-          >
-            <span
-              className={cn(
-                "absolute transition-all duration-200",
-                mobileMenuOpen ? "rotate-90 opacity-100" : "rotate-0 opacity-0"
-              )}
             >
-              <X className="h-6 w-6" />
-            </span>
-            <span
-              className={cn(
-                "absolute transition-all duration-200",
-                mobileMenuOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
-              )}
-            >
-              <Menu className="h-6 w-6" />
-            </span>
-          </button>
+              <span
+                className={cn(
+                  "absolute transition-all duration-200",
+                  mobileMenuOpen ? "rotate-90 opacity-100" : "rotate-0 opacity-0"
+                )}
+              >
+                <X className="h-6 w-6" />
+              </span>
+              <span
+                className={cn(
+                  "absolute transition-all duration-200",
+                  mobileMenuOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
+                )}
+              >
+                <Menu className="h-6 w-6" />
+              </span>
+            </button>
+          </div>
         </Container>
       </header>
 

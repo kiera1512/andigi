@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ArrowLeft } from "lucide-react";
 
 interface PageProps {
@@ -109,6 +110,15 @@ export default async function BlogDetailPage({ params }: PageProps) {
     <>
       <Section className="bg-secondary py-12">
         <Container>
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Blog", href: "/blog" },
+              { label: post.title },
+            ]}
+            className="mb-8"
+          />
+
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8"
