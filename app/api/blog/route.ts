@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     // Get all published blog posts, sorted by published_at descending
     const { data, error } = await supabase
       .from('blog_posts')
-      .select('*')
+      .select('id, title, slug, excerpt, content, category, featured_image, published_at, author')
       .eq('published', true)
       .order('published_at', { ascending: false })
 
