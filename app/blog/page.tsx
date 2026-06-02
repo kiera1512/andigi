@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
 import { Hero } from "@/components/sections/hero";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Badge } from "@/components/ui/badge";
+import { BlogFilter } from "@/components/blog/blog-filter";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -16,6 +14,7 @@ interface BlogPost {
   title: string;
   slug: string;
   excerpt: string;
+  content: string;
   category: string;
   featured_image: string | null;
   published_at: string;
@@ -23,29 +22,22 @@ interface BlogPost {
 
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/blog`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+    const url = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/blog`;
+    const response = await fetch(url, {
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
-      console.error("Failed to fetch blog posts");
+      console.error('Blog API error:', response.status, response.statusText);
       return [];
     }
 
-    const { data } = await response.json();
-    return data || [];
+    const result = await response.json();
+    return result?.data || [];
   } catch (error) {
-    console.error("Error fetching blog posts:", error);
+    console.error('Error fetching blog posts:', error);
     return [];
   }
-}
-
-function formatDate(date: string) {
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 }
 
 export default async function BlogPage() {
@@ -65,40 +57,7 @@ export default async function BlogPage() {
               <p className="text-muted-foreground">No blog posts published yet. Check back soon!</p>
             </div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {blogPosts.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/blog/${post.slug}`}
-                  className="group block"
-                >
-                  <article className="overflow-hidden border border-border transition-shadow hover:shadow-lg">
-                    <div className="relative aspect-[3/2] overflow-hidden bg-secondary">
-                      <Image
-                        src={post.featured_image || "/placeholder.svg?height=400&width=600"}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-4">
-                        <Badge variant="outline">{post.category}</Badge>
-                        <span className="text-sm text-muted-foreground">
-                          {formatDate(post.published_at)}
-                        </span>
-                      </div>
-                      <h2 className="mt-4 text-xl font-semibold group-hover:text-primary">
-                        {post.title}
-                      </h2>
-                      <p className="mt-2 line-clamp-2 text-muted-foreground">
-                        {post.excerpt}
-                      </p>
-                    </div>
-                  </article>
-                </Link>
-              ))}
-            </div>
+            <BlogFilter posts={blogPosts} />
           )}
         </Container>
       </Section>
