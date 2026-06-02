@@ -22,19 +22,20 @@ interface BlogPost {
 
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/blog`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+    const url = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/blog`;
+    const response = await fetch(url, {
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
-      console.error("Failed to fetch blog posts");
+      console.error('Blog API error:', response.status, response.statusText);
       return [];
     }
 
-    const { data } = await response.json();
-    return data || [];
+    const result = await response.json();
+    return result?.data || [];
   } catch (error) {
-    console.error("Error fetching blog posts:", error);
+    console.error('Error fetching blog posts:', error);
     return [];
   }
 }
